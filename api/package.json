@@ -1,0 +1,31 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Argon test api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:migrate": "sequelize-cli db:migrate --config ./src/config/config.js",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo --config ./src/config/config.js",
+    "db:seed": "sequelize-cli db:seed:all --config ./src/config/config.js",
+    "start": "nodemon ./src/app.js"
+  },
+  "keywords": [
+    "api",
+    "argon",
+    "test"
+  ],
+  "author": "Imron Rosdiana",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.3.2",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "mysql2": "^3.7.1",
+    "sequelize": "^6.35.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3",
+    "sequelize-cli": "^6.6.2"
+  }
+}
