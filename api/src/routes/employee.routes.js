@@ -7,6 +7,11 @@ const {
 const { checkSchema, validationResult } = require("express-validator");
 const { Employees } = require("../models/employees.model");
 
+const schemaCheckPagination = checkSchema({
+  page: { optional: true, isInt: true },
+  pageSize: { optional: true, isInt: true },
+});
+
 const schemaCheckId = checkSchema({
   id: { notEmpty: true, isInt: true, in: ["params"] },
 });
@@ -31,6 +36,7 @@ const schemaCreate = checkSchema({
       bail: true,
     },
   },
+  password: { notEmpty: true, isString: true },
   position: {
     isIn: {
       options: [["contract", "permanent"]],
@@ -124,7 +130,7 @@ const schemaUpdate = checkSchema({
 });
 
 const router = express.Router();
-router.get("/employees", getEmployees);
+router.get("/employees", schemaCheckPagination, getEmployees);
 router.get("/employee/:id", schemaCheckId, findOrDeleteEmployeeById);
 router.post("/employees", schemaCreate, postOrUpdateEmployees);
 router.put("/employee/:id", schemaUpdate, postOrUpdateEmployees);
