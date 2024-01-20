@@ -6,15 +6,15 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.globalResponse = (data, message = 'Data berhasil diproses') => {
+  res.globalResponse = (data, message = "Data berhasil diproses") => {
     res.json({
       success: true,
       message: message,
-      data: data,
+      ...data,
     });
   };
 
-  res.globalErrorResponse = (data, message = 'Data gagal diproses') => {
+  res.globalErrorResponse = (data, message = "Data gagal diproses") => {
     res.json({
       success: false,
       message: message,
