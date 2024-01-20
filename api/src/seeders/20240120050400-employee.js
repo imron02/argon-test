@@ -1,4 +1,6 @@
 "use strict";
+const { faker } = require("@faker-js/faker");
+const bcrypt = require("bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,17 +14,32 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-
-    return queryInterface.bulkInsert("employees", [
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash("password", salt);
+    const employees = [
       {
         firstName: "Imron",
         lastName: "Rosdiana",
         email: "imron@example.com",
         phoneNumber: "08979127446",
+        password: hashPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-    ]);
+    ];
+    for (let i = 0; i < 100; i++) {
+      employees.push({
+        firstName: faker.person.firstName(),
+        lastName: faker.person.lastName(),
+        email: faker.internet.email(),
+        phoneNumber: faker.phone.number("08##########"),
+        password: hashPassword,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+    // insert the users into the database
+    return queryInterface.bulkInsert("employees", employees);
   },
 
   async down(queryInterface, Sequelize) {
@@ -32,6 +49,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    return queryInterface.bulkDelete('employees', null, {});
+    return queryInterface.bulkDelete("employees", null, {});
   },
 };
