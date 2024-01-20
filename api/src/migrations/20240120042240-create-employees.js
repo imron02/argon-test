@@ -11,18 +11,22 @@ module.exports = {
       },
       firstName: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
       },
       lastName: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
         unique: true,
       },
+      "password": {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       photoPath: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(25),
       },
       position: {
         type: Sequelize.ENUM("contract", "permanent"),
@@ -30,7 +34,7 @@ module.exports = {
         defaultValue: "contract",
       },
       phoneNumber: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
         allowNull: false,
         unique: true,
       },

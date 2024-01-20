@@ -15,6 +15,10 @@ const Employees = sequelize.define(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     photoPath: {
       type: DataTypes.STRING,
     },
