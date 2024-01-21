@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const { Employees } = require("../models/employees.model");
-const { paginate } = require("../helpers/pagination");
+const { paginate } = require("../utils/pagination.util");
 const bcrypt = require("bcrypt");
 
 const getEmployees = async (req, res) => {
