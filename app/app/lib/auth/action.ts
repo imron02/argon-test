@@ -64,9 +64,13 @@ export async function authenticate(prevState: any, formData: FormData) {
   redirect("/dashboard");
 }
 
-export async function logOut() {
+export async function logOut(isAdmin = false) {
   cookies().delete("user");
   cookies().delete("token");
+
+  if (isAdmin) {
+    return redirect("/admin/login");
+  }
   redirect("/login");
 }
 
