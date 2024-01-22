@@ -28,10 +28,10 @@ export const { auth, signIn, signOut } = NextAuth({
             if (response.status !== 200) return null;
 
             const login = await response.json();
-            console.log("data", login.data);
             return {
               ...login.data,
               name: `${login.data.firstName} ${login.data.lastName}`,
+              token: login.token,
             };
           } catch (error) {
             console.log(error);
