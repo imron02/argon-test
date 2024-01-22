@@ -1,10 +1,7 @@
 import ProfileInfo from "@/app/ui/profile/info";
-import { auth } from "@/auth";
 import { Suspense } from "react";
 
 export default async function Page() {
-  const authUser = await auth();
-
   return (
     <section className="max-w-7xl mx-auto">
       <div>

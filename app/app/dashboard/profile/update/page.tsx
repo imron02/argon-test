@@ -1,22 +1,20 @@
 import { fetchUserProfile } from "@/app/lib/auth/action";
 import { AuthSession, User } from "@/app/lib/definitions";
 import UpdateProfile from "@/app/ui/profile/update-profile";
-import { auth } from "@/auth";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 export default async function Page() {
-  const authUser = await auth();
-  let session: AuthSession | null = null;
+  const token = cookies().get("token")?.value;
   let data: User | null = null;
 
-  if (authUser?.user) {
-    session = authUser.user as AuthSession;
-    data = await fetchUserProfile(session.token);
+  if (token) {
+    data = await fetchUserProfile(token);
   }
 
   if (!data) {
     return notFound();
   }
 
-  return <UpdateProfile user={data} token={session?.token} />;
+  return <UpdateProfile user={data} token={token} />;
 }

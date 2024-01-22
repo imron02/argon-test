@@ -2,11 +2,12 @@
 
 import { AuthState, authenticate } from "@/app/lib/auth/action";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 
 export default function LoginForm() {
   const initialState = { message: null, errors: {} } as AuthState;
   const [state, dispatch] = useFormState(authenticate, initialState);
+  const { pending } = useFormStatus();
 
   return (
     <form className="space-y-6" action={dispatch}>
@@ -29,8 +30,8 @@ export default function LoginForm() {
           />
         </div>
         <div id="email-error" aria-live="polite" aria-atomic="true">
-          {state.errors?.email &&
-            state.errors.email.map((error: string) => (
+          {state?.errors?.email &&
+            state?.errors.email.map((error: string) => (
               <p className="mt-2 text-sm text-red-500" key={error}>
                 {error}
               </p>
@@ -59,8 +60,8 @@ export default function LoginForm() {
           />
         </div>
         <div id="password-error" aria-live="polite" aria-atomic="true">
-          {state.errors?.password &&
-            state.errors.password.map((error: string) => (
+          {state?.errors?.password &&
+            state?.errors.password.map((error: string) => (
               <p className="mt-2 text-sm text-red-500" key={error}>
                 {error}
               </p>
@@ -71,6 +72,7 @@ export default function LoginForm() {
       <div>
         <button
           type="submit"
+          aria-disabled={pending}
           className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
         >
           Sign in
@@ -81,7 +83,7 @@ export default function LoginForm() {
           aria-live="polite"
           aria-atomic="true"
         >
-          {state.message && (
+          {state?.message && (
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
               <p className="text-sm text-red-500">{state.message}</p>

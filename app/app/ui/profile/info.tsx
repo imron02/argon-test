@@ -1,17 +1,17 @@
 import { fetchUserProfile } from "@/app/lib/auth/action";
 import { AuthSession, User } from "@/app/lib/definitions";
-import { auth } from "@/auth";
+import getUserCookies from "@/app/lib/utils";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function ProfileInfo() {
-  const authUser = await auth();
+  const token = cookies().get('token')?.value;
   let data: User | null = null;
 
-  if (authUser?.user) {
-    const user = authUser.user as AuthSession;
-    data = await fetchUserProfile(user.token);
+  if (token) {
+    data = await fetchUserProfile(token);
   }
 
   if (!data) {

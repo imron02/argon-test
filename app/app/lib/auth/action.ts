@@ -1,11 +1,10 @@
 "use server";
 
-import { auth, signIn, signOut } from "@/auth";
-import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { User } from "../definitions";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 const FormSchema = z.object({
   email: z
@@ -31,35 +30,44 @@ export async function authenticate(prevState: any, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Terdapat kesalahan. Gagal login.",
+      message: "",
     };
   }
 
   try {
-    await signIn("credentials", formData);
-  } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return {
-            message: "Gak bisa login, nih! Email atau passwordnya salah",
-            errors: { email: [], password: [] },
-          };
-        default:
-          return {
-            message: "Waduh, ada yang salah, nih!",
-            errors: { email: [], password: [] },
-          };
-      }
+    const response = await fetch(`${process.env.API_URL}/employee/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(validatedFields.data),
+    });
+    const login = await response.json();
+
+    if (response.status !== 200) {
+      return { errors: {}, message: login.error };
     }
-    formData;
+
+    const { password, ...data } = login.data;
+    cookies().set("user", JSON.stringify(data));
+    cookies().set("token", login.token, {
+      maxAge: 60 * 60 * 24, // One day
+      path: "/",
+    });
+  } catch (error) {
+    return {
+      message: "Waduh, ada yang salah, nih!",
+      errors: { email: [], password: [] },
+    };
   }
 
-  return { message: null, errors: { email: [], password: [] } };
+  redirect("/dashboard");
 }
 
 export async function logOut() {
-  await signOut();
+  cookies().delete("user");
+  cookies().delete("token");
+  redirect("/login");
 }
 
 export async function fetchUserProfile(token: string) {
@@ -159,10 +167,13 @@ export async function updateProfile(
         body: JSON.stringify(validatedFields.data),
       }
     );
-    console.log("response", response);
     if (response.status !== 200) {
       throw new Error("Gagal update profile");
     }
+
+    const json = await response.json();
+    const { password, ...data } = json.data;
+    cookies().set("user", JSON.stringify(data));
   } catch (error) {
     console.error(error);
     return {

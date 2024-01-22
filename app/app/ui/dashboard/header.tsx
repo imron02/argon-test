@@ -11,7 +11,7 @@ export default function Header({ user }: { user: User }) {
               <h3 className="text-gray-400">Selamat datang kembali</h3>
               <div className="flex items-center space-x-3 mt-4">
                 <h3 className="truncate font-medium text-white text-lg">
-                  {user.name}
+                  {`${user.firstName} ${user.lastName}`}
                 </h3>
                 <span className="capitalize inline-flex flex-shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                   {user.position}
