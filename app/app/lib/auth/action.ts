@@ -3,6 +3,7 @@
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import { z } from "zod";
+import { User } from "../definitions";
 
 const FormSchema = z.object({
   email: z
@@ -57,4 +58,24 @@ export async function authenticate(prevState: any, formData: FormData) {
 
 export async function logOut() {
   await signOut();
+}
+
+export async function fetchUserProfile(token: string) {
+  try {
+    const response = await fetch(`${process.env.API_URL}/employee/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch user data");
+    }
+
+    const data = await response.json();
+    return data.data as User;
+  } catch (error) {
+    console.error("error", error);
+    throw new Error("Failed to fetch user data");
+  }
 }

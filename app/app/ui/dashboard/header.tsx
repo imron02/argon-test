@@ -34,6 +34,7 @@ export default function Header({ user }: { user: User }) {
               alt="Card 1"
               className="rounded-lg"
               objectFit="cover"
+              priority
               fill
             />
           </div>

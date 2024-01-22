@@ -1,8 +1,14 @@
 export interface User {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   id: string;
   position: string;
   phoneNumber: string;
   photoPath?: string;
+}
+
+export interface AuthSession extends User {
+  name: string;
+  token: string;
 }
