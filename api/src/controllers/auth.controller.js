@@ -25,7 +25,7 @@ const loginEmployee = async (req, res) => {
 
     const token = generateToken(employee);
 
-    return res.globalResponse({ data: token });
+    return res.globalResponse({ data: employee, token });
   } catch (error) {
     console.error(error);
     res.status(500).globalErrorResponse("Terjadi kesalahan");
