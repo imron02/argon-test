@@ -3,11 +3,13 @@
 import { logOut } from "@/app/lib/auth/action";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, ClockIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { useState } from "react";
 
 const navigation = [
-  { name: "Absensi", href: "#" },
-  { name: "Performa", href: "#" },
+  { name: "Absensi", href: "/dashboard" },
+  { name: "Performa", href: "/dashboard/performance" },
+  { name: "Profil", href: "/dashboard/profile" },
 ];
 
 export default function Navbar() {
@@ -37,13 +39,13 @@ export default function Navbar() {
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
               href={item.href}
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">

@@ -12,9 +12,9 @@ export default async function Page() {
   }
 
   return (
-    <div className="pt-0 md:pt-20 px-10">
+    <>
       {user && <Header user={user} />}
       <CheckCard />
-    </div>
+    </>
   );
 }
