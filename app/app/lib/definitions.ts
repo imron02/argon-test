@@ -6,6 +6,7 @@ export interface User {
   position: string;
   phoneNumber: string;
   photoPath?: string;
+  role?: string;
 }
 
 export interface AuthSession extends User {

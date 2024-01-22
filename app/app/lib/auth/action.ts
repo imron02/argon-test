@@ -45,7 +45,7 @@ export async function authenticate(prevState: any, formData: FormData) {
     const login = await response.json();
 
     if (response.status !== 200) {
-      return { errors: {}, message: login.error };
+      return { errors: {}, message: login.error } as AuthState;
     }
 
     const { password, ...data } = login.data;
@@ -57,8 +57,8 @@ export async function authenticate(prevState: any, formData: FormData) {
   } catch (error) {
     return {
       message: "Waduh, ada yang salah, nih!",
-      errors: { email: [], password: [] },
-    };
+      errors: {},
+    } as AuthState;
   }
 
   redirect("/dashboard");
