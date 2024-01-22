@@ -2,6 +2,7 @@ const express = require("express");
 const { sequelize } = require("./models");
 const employeeRoutes = require("./routes/employee.routes");
 const authEmployeeRoutes = require("./routes/authEmployee.routes");
+const authAdminRoutes = require("./routes/authAdmin.routes");
 
 const app = express();
 app.use(express.json());
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 });
 app.use(employeeRoutes);
 app.use('/employee', authEmployeeRoutes);
+app.use('/admin', authAdminRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const { Employees } = require("../models/employees.model");
+const { Admin } = require("../models/admin.model");
 const { generateToken } = require("../utils/auth.util");
 
 const loginEmployee = async (req, res) => {
@@ -50,4 +51,31 @@ const getEmployeeProfile = async (req, res) => {
   }
 };
 
-module.exports = { loginEmployee, getEmployeeProfile };
+const loginAdmin = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).globalErrorResponse(errors.array());
+  }
+
+  try {
+    const { email, password } = req.body;
+    const admin = await Admin.findOne({ where: { email } });
+    if (!admin) {
+      return res.status(404).globalErrorResponse("User tidak ditemukan");
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, admin.password);
+    if (!isPasswordMatch) {
+      return res.status(401).globalErrorResponse("Email atau password salah");
+    }
+
+    const token = generateToken(admin);
+
+    return res.globalResponse({ data: admin, token, role: "admin" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).globalErrorResponse("Terjadi kesalahan");
+  }
+};
+
+module.exports = { loginEmployee, loginAdmin, getEmployeeProfile };

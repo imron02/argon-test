@@ -2,7 +2,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { checkSchema } = require("express-validator");
 
-const schemaEmployeeLogin = checkSchema({
+const schemaLogin = checkSchema({
   email: {
     notEmpty: true,
     isEmail: true,
@@ -32,4 +32,4 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-module.exports = { schemaEmployeeLogin, verifyToken };
+module.exports = { schemaLogin, verifyToken };
