@@ -23,10 +23,6 @@ module.exports = {
       checkOutDatetime: {
         type: Sequelize.DATE,
       },
-      status: {
-        type: Sequelize.ENUM("In", "Out"),
-        allowNull: false,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

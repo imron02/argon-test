@@ -21,7 +21,7 @@ module.exports = {
         id: 1,
         firstName: "Imron",
         lastName: "Rosdiana",
-        email: "imron@example.com",
+        email: "imron@examples.com",
         phoneNumber: "08979127446",
         password: hashPassword,
         createdAt: new Date(),

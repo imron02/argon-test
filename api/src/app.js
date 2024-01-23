@@ -3,6 +3,7 @@ const { sequelize } = require("./models");
 const employeeRoutes = require("./routes/employee.routes");
 const authEmployeeRoutes = require("./routes/authEmployee.routes");
 const authAdminRoutes = require("./routes/authAdmin.routes");
+const attendanceRoutes = require("./routes/attendance.routes");
 
 const app = express();
 app.use(express.json());
@@ -26,10 +27,11 @@ app.use((req, res, next) => {
   next();
 });
 app.use(employeeRoutes);
+app.use(attendanceRoutes);
 app.use('/employee', authEmployeeRoutes);
 app.use('/admin', authAdminRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server berjalan di http://localhost:${PORT}`);
 });
