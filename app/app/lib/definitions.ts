@@ -13,3 +13,10 @@ export interface AuthSession extends User {
   name: string;
   token: string;
 }
+
+export interface Attendance {
+  id: number;
+  employeeId: number;
+  checkInDatetime: string;
+  checkOutDatetime: string;
+}

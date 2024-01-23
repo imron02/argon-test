@@ -49,7 +49,7 @@ export default function Navbar() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <form action={logOut}>
+          <form action={() => logOut()}>
             <button className="text-sm font-semibold leading-6 text-gray-900">
               Sign Out <span aria-hidden="true">&rarr;</span>
             </button>

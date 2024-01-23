@@ -1,3 +1,4 @@
+import AttendanceTable from "@/app/ui/dashboard/table";
 import Search from "@/app/ui/search";
 import { Suspense } from "react";
 
@@ -15,6 +16,10 @@ export default function Page() {
           Cari
         </button>
       </div>
+
+      <Suspense fallback={<div>Loading...</div>}>
+        <AttendanceTable />
+      </Suspense>
     </div>
   );
 }
