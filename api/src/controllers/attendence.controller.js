@@ -1,16 +1,35 @@
 const { validationResult } = require("express-validator");
 const { Attendances } = require("../models/attendences.model");
 const { Employees } = require("../models/employees.model");
+const { Op } = require("sequelize");
 
 const getAttendance = async (req, res) => {
   if (!req.user?.user) {
     return res.status(401).globalErrorResponse("Akses ditolak");
   }
 
+  const currentDate = new Date();
+  const formattedCurrentDate = currentDate.toISOString().split("T")[0];
+
   try {
     const usr = req.user.user;
     const attendances = await Attendances.findOne({
-      where: { employeeId: usr.id },
+      where: {
+        employeeId: usr.id,
+        checkInDatetime: {
+          [Op.gte]: formattedCurrentDate + "T00:00:00",
+        },
+        [Op.or]: [
+          {
+            checkOutDatetime: {
+              [Op.lte]: formattedCurrentDate + "T23:59:59",
+            },
+          },
+          {
+            checkOutDatetime: { [Op.is]: null },
+          },
+        ],
+      },
     });
 
     if (!attendances) {
@@ -42,9 +61,8 @@ const postCheckIn = async (req, res) => {
       return res.status(404).globalErrorResponse("Data tidak ditemukan");
     }
 
-    console.log("req", req.body);
     const attendance = await Attendances.create({
-      checkInDatetime: req.body.date,
+      checkInDatetime: new Date(),
       employeeId: usr.id,
     });
     return res.globalResponse({ data: attendance });
@@ -73,7 +91,7 @@ const postCheckOut = async (req, res) => {
     }
 
     const attendance = await Attendances.update(
-      { checkOutDatetime: req.body.date },
+      { checkOutDatetime: new Date() },
       { where: { id: req.body.id } }
     );
     return res.globalResponse({ data: attendance });
@@ -83,4 +101,28 @@ const postCheckOut = async (req, res) => {
   }
 };
 
-module.exports = { getAttendance, postCheckIn, postCheckOut };
+const getAttendances = async (req, res) => {
+  if (!req.user?.user) {
+    return res.status(401).globalErrorResponse("Akses ditolak");
+  }
+
+  try {
+    const usr = req.user.user;
+    const attendances = await Attendances.findAll({
+      where: {
+        employeeId: usr.id,
+      },
+    });
+
+    if (!attendances) {
+      return res.status(404).globalErrorResponse("Data tidak ditemukan");
+    }
+
+    res.globalResponse({ data: attendances });
+  } catch (error) {
+    console.error(error);
+    res.status(500).globalErrorResponse("Terjadi kesalahan");
+  }
+};
+
+module.exports = { getAttendance, getAttendances, postCheckIn, postCheckOut };
